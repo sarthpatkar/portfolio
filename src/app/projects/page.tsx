@@ -19,12 +19,12 @@ export default function ProjectsPage() {
       <div className="flex flex-col border-t border-border/20">
         {projects.map((project, index) => {
           const numberStr = (index + 1).toString().padStart(2, '0');
-          
+
           return (
             <div key={project.slug} className="group relative flex flex-col md:flex-row items-start gap-8 md:gap-16 py-12 border-b border-border/10 hover:border-border/40 transition-colors">
               {/* Subtle hover background block */}
               <div className="absolute inset-0 bg-surface/0 group-hover:bg-surface/10 transition-colors duration-500 -mx-6 px-6 z-0 hidden md:block"></div>
-              
+
               {/* Number & Year */}
               <div className="relative z-10 flex items-center md:flex-col md:items-start gap-6 md:gap-3 shrink-0 md:w-24">
                 <span className="font-mono text-2xl font-light text-muted/30 group-hover:text-primary transition-colors duration-300">{numberStr}</span>
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
                     </span>
                     <span className="text-sm font-semibold text-primary/90">{project.category || project.type}</span>
                   </div>
-                  
+
                   <div className="flex flex-col gap-3 group/item">
                     <span className="text-[10px] font-mono text-muted uppercase tracking-[0.2em] flex items-center gap-2">
                       <span className="w-0 h-px bg-border/40 group-hover/item:w-3 transition-all duration-300"></span>
@@ -70,7 +70,7 @@ export default function ProjectsPage() {
                     ))}
                   </div>
                 </div>
-                
+
                 {project.status === "Live" && (
                   <div className="absolute top-0 right-0 flex items-center gap-1.5 font-mono text-[10px] text-green-400/70 uppercase tracking-[0.2em]">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500/70 animate-pulse" />
@@ -85,3 +85,5 @@ export default function ProjectsPage() {
     </div>
   );
 }
+
+
