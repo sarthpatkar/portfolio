@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation";
 import { projects } from "@/data/projects";
 import { CaseStudyHeader } from "@/components/portfolio/CaseStudyHeader";
-import { CaseStudySection } from "@/components/portfolio/CaseStudySection";
-import { SpecSheet } from "@/components/ui/SpecSheet";
-import { TechBadge } from "@/components/ui/TechBadge";
-import { CheckCircle2, GitPullRequest, Target, Lightbulb, Workflow, AlertCircle } from "lucide-react";
-import { ProjectShowcase } from "@/components/ui/ProjectShowcase";
+import { ArchitectureDiagram } from "@/components/ui/ArchitectureDiagram";
+import { ExternalLink, Code, LayoutTemplate, PenTool } from "lucide-react";
 
 export async function generateStaticParams() {
   return projects.map((project) => ({
@@ -26,145 +23,222 @@ export default async function ProjectPage({
   }
 
   return (
-    <article className="pb-32">
+    <article className="pb-32 font-sans">
       <CaseStudyHeader project={project} />
 
-      {/* Visual Showcase if available */}
-      {project.previewImage && (
-        <section className="max-w-5xl mx-auto px-6 -mt-8 relative z-20 mb-16">
-          <ProjectShowcase 
-            title={project.title}
-            previewImage={project.previewImage}
-            liveUrl={project.liveUrl}
-            githubUrl={project.githubUrl}
-            className="w-full h-auto aspect-video"
-          />
-        </section>
-      )}
-
-      {/* Quick Specs */}
-      <section className="max-w-5xl mx-auto px-6 mb-16">
-        <SpecSheet 
-          title="Project Specifications"
-          items={[
-            { label: "Role", value: project.role || "Engineer" },
-            { label: "Ownership", value: project.ownership || "Independent" },
-            ...(project.team ? [{ label: "Team", value: project.team }] : []),
-            { label: "Category", value: project.category || project.type },
-          ]}
-        />
-      </section>
-
-      {/* Engineering Outcomes (Impact & Contribution) */}
-      {(project.impact || project.contribution) && (
-        <CaseStudySection title="Engineering Outcomes">
-          {project.impact && (
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
-                <Target className="w-5 h-5 text-accent" /> Impact & Scale
-              </h3>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 list-none pl-0">
-                {project.impact.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 bg-surface/30 p-4 rounded-lg border border-border/40">
-                    <CheckCircle2 className="w-5 h-5 text-technical shrink-0 mt-0.5" />
-                    <span className="text-primary/90 text-sm leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {project.contribution && (
-            <div>
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
-                <GitPullRequest className="w-5 h-5 text-accent" /> Core Contributions
-              </h3>
-              <ul className="space-y-3 list-none pl-0">
-                {project.contribution.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-border mt-2 shrink-0"></span>
-                    <span className="text-primary/80 leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </CaseStudySection>
-      )}
-
-      {/* Overview & Problem */}
-      {(project.overview || project.problem || project.whyBuilt) && (
-        <CaseStudySection title="Context">
-          {project.overview && (
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-primary mb-3">Overview</h3>
-              <p>{project.overview}</p>
-            </div>
-          )}
-          {project.problem && (
-            <div className="mb-8 border-l-2 border-technical/50 pl-6 py-1">
-              <h3 className="text-lg font-mono text-technical tracking-wide mb-2">The Problem</h3>
-              <p className="m-0 text-muted">{project.problem}</p>
-            </div>
-          )}
-          {project.whyBuilt && (
-            <div>
-              <h3 className="text-xl font-semibold text-primary mb-3">Motivation</h3>
-              <p>{project.whyBuilt}</p>
-            </div>
-          )}
-        </CaseStudySection>
-      )}
-
-      {/* Architecture & Stack */}
-      <CaseStudySection title="Architecture & Stack">
-        {project.architecture && (
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
-              <Workflow className="w-5 h-5 text-accent" /> System Flow
-            </h3>
-            <p>{project.architecture}</p>
+      {/* Main Engineering Focus Header */}
+      <section className="max-w-4xl mx-auto px-6 mb-16 -mt-4 relative z-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-8 border-b border-border/10">
+          <div className="flex flex-col gap-4 max-w-2xl">
+            <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight font-serif">{project.title}</h1>
+            <p className="text-xl text-muted/90 font-medium leading-relaxed">{project.description}</p>
           </div>
-        )}
-        <div>
-          <h3 className="text-xl font-semibold text-primary mb-4">Technical Arsenal</h3>
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map(tech => (
-              <TechBadge key={tech} className="px-3 py-1.5 text-sm">{tech}</TechBadge>
-            ))}
+          
+          <div className="flex flex-col gap-3 shrink-0">
+            {project.liveUrl && (
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-8 px-6 py-3 bg-primary text-background text-sm font-bold hover:bg-primary/90 transition-colors">
+                <span>View Live Project</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+            {project.githubUrl && (
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-8 px-6 py-3 bg-surface/50 border border-border/20 text-primary text-sm font-medium hover:bg-surface hover:border-border/40 transition-colors">
+                <span>View Source</span>
+                <Code className="w-4 h-4 text-muted" />
+              </a>
+            )}
           </div>
         </div>
-      </CaseStudySection>
-
-      {/* Decisions & Challenges */}
-      {(project.decisions || project.challenges) && (
-        <CaseStudySection title="Engineering Process">
-          {project.decisions && (
-            <div className="mb-10">
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-accent" /> Decisions & Trade-offs
-              </h3>
-              <p>{project.decisions}</p>
+        
+        {/* Core Metadata Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-6 font-mono text-xs">
+          <div className="flex flex-col gap-1">
+            <span className="text-muted/60 uppercase tracking-widest">Type</span>
+            <span className="text-primary">{project.category || project.type}</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-muted/60 uppercase tracking-widest">Role</span>
+            <span className="text-primary">{project.role || "Developer"}</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-muted/60 uppercase tracking-widest">Year</span>
+            <span className="text-primary">{project.year}</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-muted/60 uppercase tracking-widest">Stack</span>
+            <div className="flex flex-wrap gap-x-2 gap-y-1">
+              {project.tech.slice(0,3).map(t => <span key={t} className="text-primary/80">{t}</span>)}
+              {project.tech.length > 3 && <span className="text-muted">+{project.tech.length - 3} more</span>}
             </div>
-          )}
-          {project.challenges && (
-            <div className="bg-surface/30 border border-border/50 rounded-xl p-6 sm:p-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-technical/5 rounded-full blur-[40px]"></div>
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center gap-2 relative z-10">
-                <AlertCircle className="w-5 h-5 text-technical" /> Technical Challenges
-              </h3>
-              <p className="m-0 relative z-10">{project.challenges}</p>
-            </div>
-          )}
-        </CaseStudySection>
-      )}
+          </div>
+        </div>
+      </section>
 
-      {/* Status & Future */}
-      {project.future && (
-        <CaseStudySection title="Future">
-          <p>{project.future}</p>
-        </CaseStudySection>
-      )}
+      {/* Engineering Content Layout */}
+      <div className="max-w-4xl mx-auto px-6 flex flex-col gap-24">
+        
+        {project.overview && (
+          <section className="flex flex-col md:flex-row gap-8 md:gap-16">
+            <h2 className="text-sm font-bold text-primary uppercase tracking-widest md:w-1/4 shrink-0 mt-1">Context</h2>
+            <div className="flex flex-col gap-6 md:w-3/4">
+              <p className="text-lg text-primary/90 leading-relaxed font-serif">{project.overview}</p>
+              {project.problem && (
+                <div className="pl-6 border-l-2 border-amber-500/50 flex flex-col gap-2">
+                  <span className="text-[10px] font-mono text-amber-500/80 uppercase tracking-widest">The Problem</span>
+                  <p className="text-primary/80 leading-relaxed text-sm">{project.problem}</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Execution facts & engineering work */}
+        {(project.impact || project.contribution) && (
+          <section className="flex flex-col md:flex-row gap-8 md:gap-16">
+            <h2 className="text-sm font-bold text-primary uppercase tracking-widest md:w-1/4 shrink-0 mt-1">Execution</h2>
+            <div className="flex flex-col gap-10 md:w-3/4">
+
+              {project.impact && (
+                <ul className="flex flex-col gap-3">
+                  {project.impact.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-4 text-sm text-primary/80 leading-relaxed">
+                      <span className="font-mono text-muted/40 shrink-0 mt-px tabular-nums">{(idx + 1).toString().padStart(2, '0')}</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {project.contribution && (
+                <div className="flex flex-col gap-4">
+                  <span className="text-[10px] font-mono text-muted uppercase tracking-widest">Key Engineering Work</span>
+                  <ul className="flex flex-col gap-4">
+                    {project.contribution.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-4 pb-4 border-b border-border/5 last:border-0 last:pb-0">
+                        <span className="font-mono text-muted/30 shrink-0 mt-px tabular-nums text-xs">{String.fromCharCode(65 + idx)}</span>
+                        <span className="text-primary/80 text-sm leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Architecture — only renders when a visualization exists for this project */}
+        {['prompt2craft', 'devicely', 't20-arena', 'talent-intelligence-ai', 'ipocraft'].includes(project.slug) && (
+          <section className="flex flex-col gap-8">
+            <div className="flex items-center gap-4">
+              <h2 className="text-sm font-bold text-primary uppercase tracking-widest">Architecture Flow</h2>
+              <div className="h-px bg-border/10 flex-1" />
+            </div>
+
+            <div className="w-full">
+              {(project.slug === 'prompt2craft' || project.slug === 'devicely') && (
+                <div className="bg-[#0a0a0a] border border-border/10 p-8 md:p-12 font-mono text-sm overflow-x-auto">
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-0 relative min-w-max">
+                    <div className="hidden md:block absolute top-1/2 left-0 w-full h-px bg-border/15 -z-10" />
+                    {project.architecture?.split('→').map((step, idx, arr) => (
+                      <div key={idx} className="flex items-center gap-0">
+                        <div className={`px-4 py-3 border text-xs whitespace-nowrap ${
+                          idx === arr.length - 1
+                            ? 'border-amber-500/30 text-amber-400/80 bg-amber-500/5'
+                            : 'border-border/30 text-primary/70 bg-[#0a0a0a]'
+                        }`}>
+                          {step.trim()}
+                        </div>
+                        {idx < arr.length - 1 && (
+                          <span className="text-border/40 mx-2 hidden md:block">→</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {project.slug === 't20-arena' && (
+                <div className="bg-[#0a0a0a] border border-border/10 p-8 md:p-12 flex justify-center">
+                  <ArchitectureDiagram slug={project.slug} className="border-none bg-transparent max-w-xl mx-auto w-full" />
+                </div>
+              )}
+
+              {project.slug === 'talent-intelligence-ai' && (
+                <div className="bg-[#0a0a0a] border border-border/10 p-8 md:p-12 font-mono text-sm text-primary/80">
+                  <div className="flex flex-col gap-0 max-w-md mx-auto">
+                    {[
+                      { label: 'Ingest 100K Resume Dataset', highlight: false },
+                      { label: 'Extract Contextual Evidence (Python)', highlight: false },
+                      { label: 'Score & Rank Deterministically', highlight: true },
+                    ].map((step, idx, arr) => (
+                      <div key={idx}>
+                        <div className={`border p-4 flex items-center gap-3 text-xs ${
+                          step.highlight
+                            ? 'border-amber-500/30 bg-amber-500/5 text-amber-400/80'
+                            : 'border-border/20 bg-background/50'
+                        }`}>
+                          <span className="font-mono text-muted/30 tabular-nums">{String(idx + 1).padStart(2,'0')}</span>
+                          {step.label}
+                        </div>
+                        {idx < arr.length - 1 && (
+                          <div className="w-px h-5 bg-border/15 ml-10" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {project.slug === 'ipocraft' && (
+                <div className="bg-[#0a0a0a] border border-border/10 p-8 md:p-12">
+                  <p className="text-muted font-mono text-xs max-w-lg">SSR via Next.js → Supabase PostgreSQL → Structured financial data → Client render. Prioritized SSR and semantic HTML for search engine indexability.</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Deep Dives */}
+        {(project.decisions || project.challenges) && (
+          <section className="flex flex-col md:flex-row gap-8 md:gap-16 border-t border-border/10 pt-16">
+            <h2 className="text-sm font-bold text-primary uppercase tracking-widest md:w-1/4 shrink-0 mt-1">Deep Dive</h2>
+            <div className="flex flex-col gap-12 md:w-3/4">
+              
+              {project.decisions && (
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                    <LayoutTemplate className="w-5 h-5 text-amber-500/70" /> Engineering Decisions
+                  </h3>
+                  <p className="text-muted/90 leading-relaxed text-sm">{project.decisions}</p>
+                </div>
+              )}
+
+              {project.challenges && (
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-lg font-bold text-primary flex items-center gap-3">
+                    <PenTool className="w-5 h-5 text-amber-500/70" /> Challenges Overcome
+                  </h3>
+                  <p className="text-muted/90 leading-relaxed text-sm">{project.challenges}</p>
+                </div>
+              )}
+
+            </div>
+          </section>
+        )}
+
+        {/* Technical Stack Breakdown */}
+        <section className="flex flex-col md:flex-row gap-8 md:gap-16 border-t border-border/10 pt-16">
+          <h2 className="text-sm font-bold text-primary uppercase tracking-widest md:w-1/4 shrink-0 mt-1">Stack</h2>
+          <div className="md:w-3/4 flex flex-wrap gap-2">
+            {project.tech.map(t => (
+              <span key={t} className="text-sm font-mono text-primary/80 bg-surface/30 border border-border/20 px-3 py-1.5 hover:bg-surface transition-colors">
+                {t}
+              </span>
+            ))}
+          </div>
+        </section>
+
+      </div>
     </article>
   );
 }

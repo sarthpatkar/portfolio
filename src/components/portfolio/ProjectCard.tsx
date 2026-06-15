@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Project } from '@/data/projects';
-import { ArrowRight } from 'lucide-react';
 import { TechBadge } from '../ui/TechBadge';
-import { ProjectShowcase } from '../ui/ProjectShowcase';
+import { ArchitectureDiagram } from '../ui/ArchitectureDiagram';
+import { ExternalLink, Code } from 'lucide-react';
 
 export function ProjectCard({ project, compact = false }: { project: Project, compact?: boolean }) {
   if (compact) {
@@ -39,59 +39,60 @@ export function ProjectCard({ project, compact = false }: { project: Project, co
 
   // Featured Project Card
   return (
-    <div className="group relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-border/40 bg-surface/20 rounded-2xl p-6 sm:p-8 hover:bg-surface/30 transition-all duration-300">
+    <div className="group relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch border border-border/40 bg-surface/20 rounded-2xl p-6 sm:p-8 hover:bg-surface/30 transition-all duration-300">
       {/* Project Info Section */}
-      <div className="lg:col-span-5 flex flex-col z-10 order-2 lg:order-1">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded border border-border/50 text-muted bg-surface/50">
-            {project.status === "Live" && <span className="w-1.5 h-1.5 rounded-full bg-technical animate-pulse"></span>}
-            {project.status}
-          </span>
-          <span className="font-mono text-xs text-technical/80 tracking-wide">
-            {project.category}
-          </span>
-        </div>
-        
-        <h3 className="text-3xl font-bold text-primary mb-4">
+      <div className="lg:col-span-6 flex flex-col z-10 order-2 lg:order-1 justify-center">
+        <h3 className="text-2xl font-bold text-primary mb-2">
           {project.title}
         </h3>
         
-        {project.challenge ? (
-          <div className="mb-6 border-l-2 border-border pl-4">
-            <p className="text-xs font-mono text-muted uppercase tracking-widest mb-1.5">Challenge</p>
-            <p className="text-primary/90 text-sm leading-relaxed">{project.challenge}</p>
-          </div>
-        ) : (
-          <p className="text-muted leading-relaxed mb-6">
-            {project.description}
-          </p>
-        )}
+        <p className="text-muted text-sm mb-6 font-medium">
+          {project.description}
+        </p>
 
-        <div className="flex flex-wrap gap-2 mb-8">
-          {project.tech.slice(0, 4).map(t => (
-            <TechBadge key={t} className="bg-surface border-border/60 text-primary/80">{t}</TechBadge>
-          ))}
-          {project.tech.length > 4 && (
-            <span className="text-xs text-muted font-mono self-center px-1">+{project.tech.length - 4}</span>
+        <div className="flex flex-col gap-4 mb-8">
+          {project.challenge && (
+            <div>
+              <p className="text-[10px] font-mono text-muted uppercase tracking-widest mb-1">Challenge</p>
+              <p className="text-primary/90 text-sm leading-relaxed">{project.challenge}</p>
+            </div>
+          )}
+          {project.focus && (
+            <div>
+              <p className="text-[10px] font-mono text-muted uppercase tracking-widest mb-1">Engineering Focus</p>
+              <p className="text-primary/90 text-sm leading-relaxed">{project.focus}</p>
+            </div>
           )}
         </div>
 
-        <Link 
-          href={`/projects/${project.slug}`} 
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-background font-medium rounded-lg hover:bg-primary/90 hover:scale-[1.02] transition-all duration-300 w-fit"
-        >
-          Read Case Study <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-        </Link>
+        <div className="flex flex-wrap items-center gap-4 mt-auto pt-4 border-t border-border/30">
+          <Link 
+            href={`/projects/${project.slug}`} 
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-all duration-300 w-fit"
+          >
+            Read Engineering Breakdown
+          </Link>
+          
+          <div className="flex items-center gap-3">
+            {project.liveUrl && (
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-accent transition-colors">
+                <ExternalLink className="w-3.5 h-3.5" /> Open Product
+              </a>
+            )}
+            {project.githubUrl && (
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-medium text-muted hover:text-primary transition-colors">
+                <Code className="w-3.5 h-3.5" /> Source
+              </a>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Project Showcase Section */}
-      <div className="lg:col-span-7 order-1 lg:order-2">
-        <ProjectShowcase 
-          title={project.title}
-          previewImage={project.previewImage}
-          liveUrl={project.liveUrl}
-          githubUrl={project.githubUrl}
-          className="h-[300px] sm:h-[400px] transition-all duration-500 border-border/40 hover:border-border/80"
+      {/* Project Diagram Section */}
+      <div className="lg:col-span-6 order-1 lg:order-2 flex items-center justify-center">
+        <ArchitectureDiagram 
+          slug={project.slug} 
+          className="h-full min-h-[300px] transition-all duration-500 hover:border-border/80" 
         />
       </div>
     </div>

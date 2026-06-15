@@ -1,45 +1,84 @@
 import { profile } from "@/data/profile";
-import { ArrowRight, FileText } from "lucide-react";
+import { ArrowRight, Code } from "lucide-react";
 import Link from "next/link";
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
-      <div className="max-w-5xl mx-auto px-6 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-surface/50 text-sm text-muted font-mono mb-8 backdrop-blur-sm">
-          <span className="w-2 h-2 rounded-full bg-technical animate-pulse"></span>
-          {profile.role}
+    <section className="relative min-h-[90vh] flex flex-col justify-center pt-28 pb-16 overflow-hidden">
+
+      {/* Hairline top rule */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border/20 to-transparent pointer-events-none" />
+
+      {/* Very subtle radial ambient light — not a glow, just depth */}
+      <div className="absolute top-1/3 left-1/4 w-[600px] h-[400px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-5xl mx-auto px-6 relative z-10 w-full">
+
+        {/* Identity label */}
+        <div className="animate-fade-in delay-0 flex items-center gap-3 mb-10 font-mono text-[10px] text-muted/45 uppercase tracking-[0.25em] select-none">
+          <span className="w-6 h-px bg-border/30" />
+          {profile.name} · Mumbai, India · B.E. IT · 2028
         </div>
-        
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-primary mb-6 max-w-4xl">
-          Building <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-technical">intelligent products</span> <br className="hidden md:block" />
-          and reliable systems.
+
+        {/* Main headline — staggered in */}
+        <h1 className="animate-fade-in-up delay-100 text-5xl sm:text-6xl lg:text-[5.5rem] font-bold tracking-tight text-primary leading-[1.03] mb-10 max-w-[16ch]">
+          I build software to understand{" "}
+          <span className="font-serif italic font-normal text-brand-amber">
+            how things work.
+          </span>
         </h1>
-        
-        <p className="text-lg md:text-xl text-muted max-w-2xl leading-relaxed mb-10">
-          {profile.heroDescription}
+
+        {/* Short, honest description */}
+        <p className="animate-fade-in-up delay-200 text-lg text-muted max-w-xl leading-relaxed mb-12">
+          3rd year B.E. IT student at RGIT Mumbai. I ship full-stack products,
+          realtime systems, and data pipelines. I learn by building, debugging,
+          and improving.
         </p>
-        
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <Link 
-            href="#projects" 
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-background font-medium rounded-lg hover:bg-primary/90 transition-colors"
+
+        {/* CTAs */}
+        <div className="animate-fade-in-up delay-300 flex flex-wrap items-center gap-5">
+          <Link
+            href="#projects"
+            className="group flex items-center gap-3 px-6 py-3 bg-primary text-background text-sm font-semibold hover:bg-primary/90 hover:-translate-y-px active:translate-y-0 transition-all"
           >
-            View Projects <ArrowRight className="w-4 h-4" />
+            See what I&apos;ve built
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <a 
-            href={profile.resume} 
-            target="_blank" 
+          <a
+            href={profile.github}
+            target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-surface border border-border text-primary font-medium rounded-lg hover:bg-elevated transition-colors"
+            className="flex items-center gap-2 text-sm text-muted hover:text-primary transition-colors font-mono group"
           >
-            <FileText className="w-4 h-4" /> Resume
+            <Code className="w-4 h-4 group-hover:text-accent transition-colors" />
+            github.com/sarthpatkar
           </a>
         </div>
+
+        {/* Status strip — plain text columns, no boxes */}
+        <div className="animate-fade-in delay-500 mt-20 pt-8 border-t border-border/10 grid grid-cols-2 sm:grid-cols-4 gap-y-8 gap-x-6">
+          <div className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted/40">Currently</span>
+            <span className="text-sm text-primary/60">Improving T20 Arena</span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted/40">Exploring</span>
+            <span className="text-sm text-primary/60">Java Spring Boot APIs</span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted/40">Year</span>
+            <span className="text-sm text-primary/60">3rd Year · RGIT Mumbai</span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted/40">Open to</span>
+            <span className="text-sm text-primary/60 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500/70 shrink-0" />
+              Software Engineering Internships · 2026
+            </span>
+          </div>
+        </div>
+
       </div>
-      
-      {/* Decorative background elements */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-grid-pattern opacity-[0.02] pointer-events-none [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"></div>
     </section>
   );
 }
